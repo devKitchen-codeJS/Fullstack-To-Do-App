@@ -4,11 +4,71 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// generator client {
+//   provider = "prisma-client"
+//   output   = "../generated/prisma"
+// }
+
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// --- Модели БД ---
+
+// 2. Модель Пользователя (User)
+model User {
+  // Стандартное поле ID
+  id String @id @default(uuid())
+
+  // Поля для стандартной аутентификации
+  email    String  @unique // Уникальный email
+  password String? // Пароль. Может быть null, если используется только Google-auth
+
+  // Поля для Google-аутентификации (OAuth)
+  googleId String? @unique // Уникальный ID от Google
+
+  // Дополнительные стандартные поля
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связь с задачами (Todo)
+  todos Todo[] // Один пользователь может иметь много задач
+
+  @@map("users") // Имя таблицы в БД
+}
+
+// 3. Модель Задачи (Todo)
+model Todo {
+  // Стандартное поле ID
+  id String @id @default(uuid())
+
+  // Основные поля задачи
+  title       String
+  description String?
+  completed   Boolean   @default(false) // Статус выполнения
+  dueDate     DateTime? // Срок выполнения
+
+  // Стандартные поля времени
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связь с Пользователем
+  userId String // ID пользователя, которому принадлежит задача
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Дополнительные поля для гибкости (например, для категорий/тегов)
+  priority Int @default(0) // 0-низкий, 1-средний, 2-высокий
+
+  @@map("todos") // Имя таблицы в БД
 }
