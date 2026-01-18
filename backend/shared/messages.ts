@@ -24,4 +24,27 @@ export const messages = {
     FAILED_PASSWORD_RESET: 'Failed Password Reset',
     RESET_PASSWORD: 'Password Reset',
   },
+  AUTH: {
+    LOGIN_SUCCESS: 'Login successful',
+    LOGIN_FAILED: 'Invalid email or password',
+    LOGOUT_SUCCESS: 'Logout successful',
+    TOKEN_INVALID: 'Token is invalid',
+    TOKEN_EXPIRED: 'Token has expired',
+    AUTHENTICATION_REQUIRED: 'Authentication required',
+    AUTHORIZATION_FAILED: 'Authorization failed',
+    PASSWORD_RESET_REQUESTED: 'Password reset requested',
+    PASSWORD_RESET_SUCCESS: 'Password reset successful',
+    ACCOUNT_LOCKED: 'Account locked due to multiple failed attempts',
+    AGE_IS_NOT_VERIFIED:
+      'Age is not verified. You must be at least 18 years old to register.',
+    USER_IS_ACTIVATED: 'Your account is now active!',
+    USER_ALREADY_ACTIVATED: 'User already activated',
+    LINK_EXPIRED:
+      'The confirmation link has expired. Please request a new one.',
+    INVALID_TOKEN: 'Invalid confirmation token.',
+    PASSWORD_RESET: 'Password reset instructions have been sent to your email',
+    CHECK_EMAIL_FOR_2FA_CODE: 'Check your email for code',
+    USER_NOT_ACTIVE_CHECK_EMAIL:
+      'User is not active. Check your email for confirmation link',
+  },
 };

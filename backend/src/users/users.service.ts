@@ -6,7 +6,7 @@ import { PrismaService } from 'shared/prisma';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(email: string, password?: string, googleId?: string) {
+  async createUser(email: string, password: string, googleId?: string) {
     const userExists = await this.prisma.user.findUnique({
       where: { email },
     });
