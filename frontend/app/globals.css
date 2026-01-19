@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  /* --foreground: #171717; */
+  --background: #04202c;
+  --primary: #04202c;
+  --secondary: #304040;
+  --accent: #5b7065;
+  --muted: #c9d1c8;
+
   --container-padding: 11.25rem;
   --container-padding-mobile: 2rem;
 }
 
 @theme inline {
-  --font-inter: var(--font-inter);
   --color-background: var(--background);
-  /* --color-foreground: var(--foreground); */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+
+  --font-inter: var(--font-inter);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -22,12 +30,6 @@
   }
 } */
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer components {
   .container-padding {
     @apply w-auto px-[2rem] lg:px-[11.25rem];
@@ -35,5 +37,8 @@ body {
 
   .form-input {
     @apply font-inter rounded-md border border-gray-300 px-3 py-2 text-base placeholder:text-gray-300;
+  }
+  .submit-button {
+    @apply bg-accent text-white font-medium rounded-md px-4 py-2 hover:bg-blue-700;
   }
 }

@@ -1,13 +1,21 @@
+"use client";
+
 import React from "react";
 import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
 
 import logomark from "@/public/icons/to-do-white.png";
+import { useRouter } from "next/navigation";
+import ButtonAction from "../buttons/ButtonAction";
 
 const Header = () => {
+  const router = useRouter();
+  const redirectToSignIn = () => {
+    router.push("/signin");
+  };
   return (
-    <header className=' bg-gray-800 text-white sticky top-0 z-50'>
+    <header className=' bg-background text-muted sticky top-0 z-50'>
       <Container className='flex h-[76px] items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Link href='/'>
@@ -15,8 +23,21 @@ const Header = () => {
           </Link>
         </div>
         <div className='flex flex-grow justify-center px-8'>
-          <input className='form-input w-full max-w-full flex-grow xl:max-w-[800px]' placeholder="Search..."/>
+          <input
+            className='form-input w-full max-w-full flex-grow xl:max-w-[800px]'
+            placeholder='Search...'
+          />
         </div>
+
+        {/* <Link href='/signin' className='ml-4'>
+          Sign In
+        </Link> */}
+        <button className='submit-button' onClick={redirectToSignIn}>
+          Sign In
+        </button>
+        <ButtonAction>
+          <p>Sign In</p>
+        </ButtonAction>
       </Container>
       <div className='menu-icon md:hidden'>
         {/* Add an icon for mobile menu toggle */}
