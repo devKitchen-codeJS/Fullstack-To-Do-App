@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 import GoogleButton from "@/components/buttons/GoogleButton";
 import { AuthFormValues } from "./types";
+import { useRouter } from "next/navigation";
 
 const initialValues: AuthFormValues = {
   email: "",
@@ -17,13 +18,18 @@ const validationSchema = Yup.object({
 });
 
 const SignInForm = () => {
+  const router = useRouter();
+
+  const redirectToSignUp = () => {
+    router.push("/signup");
+  };
   const handleSubmit = (values: AuthFormValues) => {
     console.log("Sign in:", values);
   };
 
   return (
     <div className='w-full max-w-md space-y-6'>
-      <h2 className='text-2xl font-semibold text-text-primary'>Sign in</h2>
+      <h2 className='text-2xl font-semibold  text-center'>Welcome back!</h2>
 
       <GoogleButton onClick={() => console.log("Google sign in")} />
 
@@ -65,9 +71,15 @@ const SignInForm = () => {
 
             <button
               type='submit'
-              className='w-full bg-white hover:bg-primary-hover text-background py-2 rounded-lg transition'>
+              className='w-full bg-white hover:bg-white-hover text-background py-2 rounded-lg transition'>
               Sign in
             </button>
+
+            <p
+              className='text-center cursor-pointer'
+              onClick={redirectToSignUp}>
+              Go to Sign up
+            </p>
           </Form>
         )}
       </Formik>

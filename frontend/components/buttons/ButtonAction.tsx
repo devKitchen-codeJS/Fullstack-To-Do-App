@@ -1,17 +1,20 @@
-import React, { ReactNode } from "react";
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
-type BtnActionProps = {
-  children: ReactNode;
-  className?: string;
-};
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary";
+}
+// type BtnActionProps = {
+//   children: ReactNode;
+//   className?: string;
+// };
 
-const ButtonAction = ({ children, className }: BtnActionProps) => {
+const ButtonAction = ({ children, className, onClick }: ButtonProps) => {
   return (
-    <div className=''>
+    <button onClick={onClick} className={className}>
       <span className='inline-block bg-accent text-white px-6 py-3 rounded-lg shadow-lg hover:bg-muted hover:text-background transition-colors duration-300 cursor-pointer'>
         {children}
       </span>
-    </div>
+    </button>
   );
 };
 
