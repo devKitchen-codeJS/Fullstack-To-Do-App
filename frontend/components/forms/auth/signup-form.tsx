@@ -29,8 +29,9 @@ const SignUpForm = () => {
   const handleSubmit = async (values: typeof initialValues) => {
     const { confirmPassword, ...rest } = values;
     try {
-      await axiosInstance.post("/auth/signup", rest);
+      await axiosInstance.post("/auth/register", rest);
       toast.success("Sign up successful! Please sign in.");
+      router.push("/signin");
     } catch (error) {
       const err = error as AxiosError<{ message: string | string[] }>;
       const message = err.response?.data?.message;

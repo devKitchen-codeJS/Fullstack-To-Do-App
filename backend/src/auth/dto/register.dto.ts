@@ -10,11 +10,11 @@ export class RegisterDto {
   @IsString()
   @MinLength(6)
   password: string;
-  @ApiProperty({
-    example: 'John Doe',
-    description: 'User name',
-    required: false,
-  })
-  @IsString()
-  name?: string;
+  // @ApiProperty({
+  //   example: 'John Doe',
+  //   description: 'User name',
+  //   required: false,
+  // })
+  // @IsString()
+  // name?: string;
 }

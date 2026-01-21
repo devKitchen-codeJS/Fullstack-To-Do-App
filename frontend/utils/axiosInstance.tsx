@@ -36,6 +36,7 @@ axiosInstance.interceptors.response.use(
         });
         const { access_token, refresh_token } = response.data;
         saveToken({ access_token, refresh_token });
+        console.log("Token refreshed");
         originalRequest.headers.Authorization = `Bearer ${access_token}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
