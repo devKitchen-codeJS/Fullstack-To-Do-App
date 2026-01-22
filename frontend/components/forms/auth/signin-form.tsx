@@ -6,6 +6,10 @@ import * as Yup from "yup";
 import GoogleButton from "@/components/buttons/GoogleButton";
 import { AuthFormValues } from "./types";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
+import { saveToken, saveUserData } from "@/utils/tokenUtils";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 
 const initialValues: AuthFormValues = {
   email: "",
@@ -23,10 +27,19 @@ const SignInForm = () => {
   const redirectToSignUp = () => {
     router.push("/signup");
   };
-  const handleSubmit = (values: AuthFormValues) => {
-    console.log("Sign in:", values);
+  const handleSubmit = async (values: AuthFormValues) => {
+    try {
+      const res = await axiosInstance.post("/auth/login", values);
+      const { user, accessToken, refreshToken } = res.data;
+      saveUserData(user);
+      saveToken({ access_token: accessToken, refresh_token: refreshToken });
+      if (res.status === 201) router.push("/");
+    } catch (error) {
+      const err = error as AxiosError<{ message: string | string[] }>;
+      const message = err.response?.data?.message;
+      toast.error(Array.isArray(message) ? message.join("\n") : message);
+    }
   };
-  
 
   return (
     <div className='w-full max-w-md space-y-6'>

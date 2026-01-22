@@ -24,7 +24,7 @@ const Header = () => {
         </div>
         <div className='flex flex-grow justify-center px-8'>
           <input
-            className='form-input w-full max-w-full flex-grow xl:max-w-[800px]'
+            className=' hidden md:flex form-input w-full max-w-full flex-grow xl:max-w-[800px] '
             placeholder='Search...'
           />
         </div>
@@ -35,9 +35,6 @@ const Header = () => {
         <button className='submit-button' onClick={redirectToSignIn}>
           Sign In
         </button>
-        <ButtonAction>
-          <p>Sign In</p>
-        </ButtonAction>
       </Container>
       <div className='menu-icon md:hidden'>
         {/* Add an icon for mobile menu toggle */}
