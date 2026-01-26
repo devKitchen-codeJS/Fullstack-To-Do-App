@@ -7,13 +7,13 @@ import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [
-    UsersModule,
     PrismaModule,
     JwtModule.register({
-      global: true, // Make JwtModule global
+      global: true,
     }),
     AuthModule,
     TodoModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

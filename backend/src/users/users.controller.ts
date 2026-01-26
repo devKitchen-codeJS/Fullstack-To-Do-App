@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { JwtGuard } from 'shared/guard';
 
 @Controller('users')
 export class UsersController {
@@ -36,5 +37,15 @@ export class UsersController {
   @Get('email/:email')
   findByEmail(@Param('email') email: string) {
     return this.service.findByEmail(email);
+  }
+  @ApiOperation({
+    summary: 'Get all users',
+    description: 'Retrieves a list of all users.',
+  })
+  @UseGuards(JwtGuard)
+  @ApiOkResponse({ description: 'List of users retrieved successfully.' })
+  @Get()
+  findAll() {
+    return this.service.findAll();
   }
 }
