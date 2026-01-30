@@ -82,4 +82,26 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
+
+  // -------------------------
+  // VERIFY ACCESS TOKEN
+  // -------------------------
+  async verifyAccessToken(accessToken: string) {
+    try {
+      const payload = await this.jwt.verifyAsync(accessToken);
+
+      const user = await this.usersService.findById(payload.sub);
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      return {
+        id: user.id,
+        email: user.email,
+      };
+    } catch {
+      throw new UnauthorizedException('Invalid or expired access token');
+    }
+  }
 }

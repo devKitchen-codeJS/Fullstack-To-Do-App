@@ -21,8 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     if (!secret) {
       throw new Error('provide a JWT_SECRET in .env');
+    } else {
+      console.log('JWT Strategy initialized with secret:', secret);
     }
-
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: secret,

@@ -23,4 +23,9 @@ export class AuthController {
   refresh(@Body() dto: { refreshToken: string }) {
     return this.auth.refresh(dto.refreshToken);
   }
+  @ApiOperation({ summary: 'Verify access token' })
+  @Post('verify')
+  verify(@Body() dto: { accessToken: string }) {
+    return this.auth.verifyAccessToken(dto.accessToken);
+  }
 }

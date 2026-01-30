@@ -1,11 +1,12 @@
 import axios from "axios";
+
+import { toast } from "sonner";
 import {
   getAccessToken,
   getRefreshToken,
-  removeUserDataFromLocalStorage,
+  removeUserDataFromStorage,
   saveToken,
-} from "./tokenUtils";
-import { toast } from "sonner";
+} from "./tokenCookieUtils";
 
 const axiosInstance = axios.create({
   baseURL: "/api/",
@@ -41,7 +42,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         toast.error("Session expired. Please log in again.");
-        removeUserDataFromLocalStorage();
+        removeUserDataFromStorage();
         return Promise.reject(refreshError);
       }
     }

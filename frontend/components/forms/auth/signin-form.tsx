@@ -7,9 +7,9 @@ import GoogleButton from "@/components/buttons/GoogleButton";
 import { AuthFormValues } from "./types";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
-import { saveToken, saveUserData } from "@/utils/tokenUtils";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
+import { saveToken, saveUserData } from "@/utils/tokenCookieUtils";
 
 const initialValues: AuthFormValues = {
   email: "",
@@ -33,7 +33,7 @@ const SignInForm = () => {
       const { user, accessToken, refreshToken } = res.data;
       saveUserData(user);
       saveToken({ access_token: accessToken, refresh_token: refreshToken });
-      if (res.status === 201) router.push("/");
+      if (res.status === 201) window.location.href = "/dashboard";
     } catch (error) {
       const err = error as AxiosError<{ message: string | string[] }>;
       const message = err.response?.data?.message;
