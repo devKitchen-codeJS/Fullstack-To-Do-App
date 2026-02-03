@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // prisma/seed.ts
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { PrismaClient } from '@prisma/client';
+import { Priority, PrismaClient, TaskStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -12,6 +12,9 @@ async function main() {
   // 1. Очистка существующих данных (опционально)
   await prisma.todo.deleteMany({});
   await prisma.user.deleteMany({});
+  await prisma.taskList.deleteMany({});
+  await prisma.taskNotes.deleteMany({});
+  console.log('Очистка данных завершена.');
 
   // 2. Создание тестового пользователя
   const hashedPassword = await bcrypt.hash('testpassword', 10);
@@ -26,34 +29,62 @@ async function main() {
 
   console.log(`Создан пользователь: ${alice.name} (${alice.email})`);
 
+  const mainList = await prisma.taskList.create({
+    data: {
+      name: 'Основные задачи',
+      description: 'Личный todo-лист',
+      userId: alice.id,
+    },
+  });
+
   // 3. Создание задач для пользователя
-  await prisma.todo.createMany({
+  const todos = await prisma.todo.createMany({
     data: [
       {
         userId: alice.id,
         title: 'Купить молоко',
         description: 'Обезжиренное, 1 литр',
-        completed: false,
-        priority: 2,
+        status: TaskStatus.PENDING,
+        priority: Priority.LOW,
+        position: 1,
         dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
       },
       {
         userId: alice.id,
         title: 'Закончить отчет',
         description: 'Секция 3 и 4',
-        completed: true,
-        priority: 1,
+        status: TaskStatus.PENDING,
+        priority: Priority.LOW,
+        position: 1,
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 2)),
+        taskListId: mainList.id,
       },
       {
         userId: alice.id,
         title: 'Позвонить другу',
-        completed: false,
-        priority: 0,
+        status: TaskStatus.PENDING,
+        priority: Priority.LOW,
+        position: 1,
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 2)),
+        taskListId: mainList.id,
       },
     ],
   });
 
   console.log(`Создано 3 задачи для пользователя ${alice.name}`);
+
+  // await prisma.taskNotes.create({
+  //   data: {
+  //     content: 'Это заметка для задачи',
+  //     todoId: todos[0]?.id || '',
+  //   },
+  // });
+  // console.log('Созданы заметки для задачи.');
+  /*
+  Needed for fixes: 
+  add relation to User model to track note ownership and ensure data integrity.
+  add asignment of notes to specific users for better management.
+  */
 }
 
 main()

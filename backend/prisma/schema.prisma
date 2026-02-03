@@ -2,6 +2,24 @@ enum RoleType {
   ADMIN
   USER
   MODERATOR
+  MARKETPLACEOWNER
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
 }
 
 generator client {
@@ -26,11 +44,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  todos Todo[] 
+  todos      Todo[]
+  task_lists TaskList[]
 
   role RoleType @default(USER) // Роль пользователя
 
-  @@map("users") 
+  @@map("users")
 }
 
 model Todo {
@@ -38,17 +57,55 @@ model Todo {
 
   title       String
   description String?
-  completed   Boolean   @default(false) // Статус выполнения
+  status      TaskStatus @default(PENDING) // Статус задачи
+  priority    Priority   @default(LOW) // Приоритет задачи
+  position    Int        @default(0) // Позиция задачи для сортировки
   dueDate     DateTime? // Срок выполнения
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId String 
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Дополнительные поля для гибкости (например, для категорий/тегов)
-  priority Int @default(0) // 0-низкий, 1-средний, 2-высокий
+  task_notes TaskNotes[]
+  taskListId String? // Ссылка на список задач (если используется)
+  taskList   TaskList?   @relation(fields: [taskListId], references: [id], onDelete: SetNull)
 
   @@map("todos") // Имя таблицы в БД
+}
+
+model TaskNotes {
+  id String @id @default(uuid())
+
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  todoId String?
+  todo   Todo?   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+  @@map("task_notes") // Имя таблицы в БД
+  /*
+  Needed for fixes: 
+  add relation to User model to track note ownership and ensure data integrity.
+  add asignment of notes to specific users for better management.
+  */
+}
+
+model TaskList {
+  id String @id @default(uuid())
+
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  todos Todo[]
+
+  @@map("task_lists") // Имя таблицы в БД
 }
