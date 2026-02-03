@@ -1,9 +1,17 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Request } from 'express';
+import { JwtGuard } from 'shared/guard';
 
+interface RequestWithUser extends Request {
+  user: {
+    id: string;
+    email: string;
+  };
+}
 @Controller('auth')
 export class AuthController {
   constructor(private auth: AuthService) {}
@@ -27,5 +35,11 @@ export class AuthController {
   @Post('verify')
   verify(@Body() dto: { accessToken: string }) {
     return this.auth.verifyAccessToken(dto.accessToken);
+  }
+  @ApiOperation({ summary: 'Is logined check' })
+  @UseGuards(JwtGuard)
+  @Get('me')
+  me(@Req() req: RequestWithUser) {
+    return req.user;
   }
 }

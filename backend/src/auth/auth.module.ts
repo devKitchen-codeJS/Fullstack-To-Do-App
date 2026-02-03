@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from 'shared/strategies/jwt.srategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -10,8 +12,9 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'super-secret',
     }),
+    ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

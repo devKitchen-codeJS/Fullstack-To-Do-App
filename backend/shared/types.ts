@@ -5,3 +5,7 @@ export interface ITokenPayload {
   email: string;
   role: RoleType;
 }
+export interface IUser {
+  id: string;
+  email: string;
+}

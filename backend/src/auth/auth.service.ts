@@ -57,7 +57,7 @@ export class AuthService {
   // GENERATE TOKENS
   // -------------------------
   async generateTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
+    const payload = { userId, email };
 
     const accessToken = await this.jwt.signAsync(payload, {
       expiresIn: '15m', // живет 15 минут

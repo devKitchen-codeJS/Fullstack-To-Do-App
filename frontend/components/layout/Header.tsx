@@ -8,12 +8,22 @@ import Image from "next/image";
 import logomark from "@/public/icons/to-do-white.png";
 import { useRouter } from "next/navigation";
 import ButtonAction from "../buttons/ButtonAction";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
+  const { user, isAuthenticated, loading, logout } = useAuth();
   const router = useRouter();
   const redirectToSignIn = () => {
     router.push("/signin");
   };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+  if (loading) return null;
+
   return (
     <header className=' bg-background text-muted sticky top-0 z-50'>
       <Container className='flex h-[76px] items-center justify-between'>
@@ -28,13 +38,17 @@ const Header = () => {
             placeholder='Search...'
           />
         </div>
-
-        {/* <Link href='/signin' className='ml-4'>
-          Sign In
-        </Link> */}
-        <button className='submit-button' onClick={redirectToSignIn}>
-          Sign In
-        </button>
+        <div>
+          {isAuthenticated ? (
+            <div className=" cursor-pointer" onClick={handleLogout}>{user?.email}</div>
+          ) : (
+            <div>
+              <button className='submit-button' onClick={redirectToSignIn}>
+                Sign In
+              </button>
+            </div>
+          )}
+        </div>
       </Container>
       <div className='menu-icon md:hidden'>
         {/* Add an icon for mobile menu toggle */}
