@@ -1,11 +1,14 @@
-import React from 'react';
+import { TaskCalendar } from "@/components/calendar/TaskCalendar";
+import Container from "@/components/layout/Container";
+import React from "react";
 
 const Dashboard = () => {
-    return (
-        <div>
-            Welcome to the Dashboard!
-        </div>
-    );
+  return (
+    <Container>
+      <div>Welcome to the Dashboard!</div>
+      <TaskCalendar />
+    </Container>
+  );
 };
 
 export default Dashboard;

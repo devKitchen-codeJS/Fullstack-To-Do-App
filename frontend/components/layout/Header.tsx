@@ -28,19 +28,28 @@ const Header = () => {
     <header className=' bg-background text-muted sticky top-0 z-50'>
       <Container className='flex h-[76px] items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <Link href='/'>
+          <Link href='/' className='cursor-pointer'>
             <Image src={logomark} alt='Logo' className='h-8 w-auto' />
           </Link>
         </div>
         <div className='flex flex-grow justify-center px-8'>
-          <input
-            className=' hidden md:flex form-input w-full max-w-full flex-grow xl:max-w-[800px] '
-            placeholder='Search...'
-          />
+          {!isAuthenticated && (
+            <input
+              className=' hidden md:flex form-input w-full max-w-full flex-grow xl:max-w-[800px] '
+              placeholder='Search...'
+            />
+          )}
+          {isAuthenticated && (
+            <Link href='/dashboard' className='text-lg font-medium'>
+              Dashboard
+            </Link>
+          )}
         </div>
         <div>
           {isAuthenticated ? (
-            <div className=" cursor-pointer" onClick={handleLogout}>{user?.email}</div>
+            <div className=' cursor-pointer' onClick={handleLogout}>
+              {user?.email}
+            </div>
           ) : (
             <div>
               <button className='submit-button' onClick={redirectToSignIn}>

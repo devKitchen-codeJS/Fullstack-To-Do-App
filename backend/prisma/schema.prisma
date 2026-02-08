@@ -46,6 +46,7 @@ model User {
 
   todos      Todo[]
   task_lists TaskList[]
+    // userActivity UserActivity[]
 
   role RoleType @default(USER) // Роль пользователя
 
@@ -109,3 +110,14 @@ model TaskList {
 
   @@map("task_lists") // Имя таблицы в БД
 }
+
+// model UserActivity {
+//   id        String   @id @default(uuid())
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    String   
+//   action    String   @db.VarChar(255)
+//   details   String   @db.Text 
+//   timestamp DateTime @default(now())
+//   ipAddress String? @db.VarChar(45)
+//   @@map("user_activity")
+// }
