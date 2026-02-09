@@ -8,7 +8,22 @@ export class TodoService {
   constructor(private prisma: PrismaService) {}
 
   create(dto: CreateTodoDto) {
-    return this.prisma.todo.create({ data: dto });
+    return this.prisma.todo.create({
+      data: {
+        title: dto.title,
+        description: dto.description,
+        userId: dto.userId,
+        status: dto.status,
+        priority: dto.priority,
+        position: dto.position,
+        dueDate: dto.dueDate,
+        task_notes: dto.task_notes
+          ? {
+              create: dto.task_notes.map((content) => ({ content })),
+            }
+          : undefined,
+      },
+    });
   }
 
   getByUser(userId: string) {
