@@ -1,12 +1,17 @@
-import { TaskCalendar } from "@/components/calendar/TaskCalendar";
+import { WindowProvider } from "@/app/context/Window/WindowContext";
+
 import Container from "@/components/layout/Container";
-import React from "react";
+import DragableContainer from "@/components/dragable_area/DragableContainer";
+import EditSidebarMenu from "@/components/layout/EditSidebarMenu";
+
 
 const Dashboard = () => {
   return (
-    <Container>
-      <div>Welcome to the Dashboard!</div>
-      <TaskCalendar />
+    <Container className=' relative bg-secondary h-[calc(100vh-76px)] w-full'>
+      <WindowProvider>
+        <EditSidebarMenu />
+        <DragableContainer />
+      </WindowProvider>
     </Container>
   );
 };

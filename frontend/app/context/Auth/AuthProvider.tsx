@@ -11,8 +11,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosInstance.get("/auth/me")
-      .then(res => setUser(res.data))
+    axiosInstance
+      .get("/auth/me")
+      .then((res) => setUser(res.data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
@@ -30,8 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthenticated: !!user,
         loading,
         logout,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );

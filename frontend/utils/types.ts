@@ -13,3 +13,14 @@ export interface AuthContextType {
   loading: boolean;
   logout: () => void;
 }
+
+export type WindowState = {
+  id: string;
+  type: "calendar" | "chat" | "chart" | "todo";
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+  zIndex: number;
+  isMinimized: boolean;
+  isMaximized: boolean;
+  isClosed: boolean;
+};

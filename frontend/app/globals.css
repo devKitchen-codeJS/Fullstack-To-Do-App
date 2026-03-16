@@ -9,6 +9,7 @@
 
   --container-padding: 11.25rem;
   --container-padding-mobile: 2rem;
+  --header-height: 76px;
 }
 
 @theme inline {
@@ -21,6 +22,7 @@
   --font-inter: var(--font-inter);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --spacing-header: var(--header-height);
 }
 
 /* @media (prefers-color-scheme: dark) {

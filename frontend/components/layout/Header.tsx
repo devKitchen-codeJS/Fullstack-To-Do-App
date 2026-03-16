@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <header className=' bg-background text-muted sticky top-0 z-50'>
-      <Container className='flex h-[76px] items-center justify-between'>
+      <Container className='flex h-header items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Link href='/' className='cursor-pointer'>
             <Image src={logomark} alt='Logo' className='h-8 w-auto' />

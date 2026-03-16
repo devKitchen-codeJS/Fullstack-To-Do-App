@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import CalendarTaskModal from "./CalendarTaskModal";
-
-
 
 function getCalendarDays(date: Date): Date[] {
   const year = date.getFullYear();
@@ -37,15 +35,15 @@ function formatMonth(date: Date) {
   });
 }
 
-
-
 export function TaskCalendar() {
   const [currentDate, setCurrentDate] = useState(() => new Date());
 
-  const days = useMemo(
-    () => getCalendarDays(currentDate),
-    [currentDate]
-  );
+  //hovering date
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const days = useMemo(() => getCalendarDays(currentDate), [currentDate]);
 
   const currentMonth = currentDate.getMonth();
 
@@ -63,65 +61,106 @@ export function TaskCalendar() {
 
   const handleNewTask = () => {
     return <CalendarTaskModal />;
-  }
+  };
+  const handledoubleClick = () => {
+    console.log("Open task modal for date:");
+  };
 
+  const onMouseDownHandle = (date: Date) => {
+    console.log("Mouse down", date);
+    setIsSelecting(true);
+    setStartDate(date);
+    setEndDate(date);
+  };
+
+  const onMouseEnterHanle = (date: Date) => {
+    console.log("Mouse enter", date);
+
+    if (!isSelecting || !startDate) return;
+    setEndDate(date);
+  };
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      setIsSelecting(false);
+      console.log("Mouse up");
+    };
+
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(isSelecting, startDate, endDate);
+  }, [isSelecting]);
+
+  const isInRange = (date: Date) => {
+    if (!startDate || !endDate) return false;
+
+    const time = date.getTime();
+    const start = Math.min(startDate.getTime(), endDate.getTime());
+    const end = Math.max(startDate.getTime(), endDate.getTime());
+
+    return time >= start && time <= end;
+  };
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-4 border rounded-lg">
+    <div className='w-full h-full  rounded-lg'>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <button
           onClick={prevMonth}
-          className="px-3 py-1 rounded bg-muted/20 hover:bg-muted/80"
-        >
+          className='px-3 py-1 rounded bg-muted/20 hover:bg-muted/80'>
           ←
         </button>
 
-        <h2 className="text-xl font-semibold capitalize">
+        <h2 className='text-xl font-semibold capitalize'>
           {formatMonth(currentDate)}
         </h2>
 
         <button
           onClick={nextMonth}
-          className="px-3 py-1 rounded bg-muted/20 hover:bg-muted/80"
-        >
+          className='px-3 py-1 rounded bg-muted/20 hover:bg-muted/80'>
           →
         </button>
       </div>
 
       {/* Weekdays */}
-      <div className="grid grid-cols-7 text-sm text-muted-foreground">
+      <div className='grid grid-cols-7 text-sm text-muted-foreground '>
         {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
-          <div key={day} className="p-2 text-center">
+          <div key={day} className='p-2 text-center'>
             {day}
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-px rounded-lg  bg-blue-300/80">
+      <div className='grid grid-cols-7 gap-px rounded-lg  '>
         {days.map((date) => {
-          const isCurrentMonth =
-            date.getMonth() === currentMonth;
+          const isCurrentMonth = date.getMonth() === currentMonth;
 
-          const isToday =
-            date.toDateString() === new Date().toDateString();
+          const isToday = date.toDateString() === new Date().toDateString();
 
           return (
             <div
               key={date.toISOString()}
               className={clsx(
-                "h-28 bg-white p-2 text-sm flex flex-col ",
-                !isCurrentMonth && "opacity-70",
-                isToday && "border rounded-lg hover:bg-yellow-100 border-yellow-400"
+                "h-28  bg-white p-2 text-sm flex flex-col hover:bg-blue-200 rounded-lg border",
+                !isCurrentMonth && "opacity-70 ",
+                isInRange(date) && "bg-yellow-200",
+                isToday &&
+                  "border rounded-lg hover:bg-yellow-100 border-yellow-400"
               )}
               onClick={handleNewTask}
-            >
-              <span className="font-medium">
-                {date.getDate()}
-              </span>
+              onDoubleClick={handledoubleClick}
+              onMouseDown={() => onMouseDownHandle(date)}
+              onMouseEnter={() => onMouseEnterHanle(date)}>
+              <span className='font-medium'>{date.getDate()}</span>
 
               {/* Здесь будут задачи */}
-              <div className="mt-1 flex-1 space-y-1 text-xs text-muted-foreground">
+              <div className='mt-1 flex-1 space-y-1 text-xs text-muted-foreground'>
                 {/* placeholder */}
                 {/* <div className=" bg-red-300 border rounded-lg">New Task</div> */}
               </div>
