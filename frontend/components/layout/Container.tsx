@@ -8,7 +8,7 @@ type ContainerProps = {
 
 const Container = ({ children, className }: ContainerProps) => {
   return (
-    <div className={clsx(`container-padding mx-auto w-full py-2`, className)}>
+    <div className={clsx(`container-padding mx-auto w-full `, className)}>
       {children}
     </div>
   );

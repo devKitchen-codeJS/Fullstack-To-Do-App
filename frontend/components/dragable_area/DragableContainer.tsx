@@ -8,7 +8,6 @@ export default function DragableContainer() {
   const { windows, addWindow } = useWindowContext();
   useEffect(() => {
     addWindow("calendar");
-    addWindow("calendar");
   }, []);
   return (
     <div className='w-full h-full relative'>
