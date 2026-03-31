@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import WindowHeader from "../window_components/WindowHeader";
 import { WindowState } from "@/utils/types";
 import WindowRender from "./WindowRender";
@@ -9,10 +9,13 @@ import { useWindow } from "@/hooks/useWindow";
 
 type Props = {
   custom_window: WindowState;
+  constraintsRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export default function WindowWrapper({ custom_window }: Props) {
-  const constraintsRef = useRef<HTMLDivElement>(null);
+export default function WindowWrapper({
+  custom_window,
+  constraintsRef,
+}: Props) {
   const { isEdditMode } = useWindow();
 
   const [position, setPosition] = useState(custom_window.position);
@@ -25,20 +28,44 @@ export default function WindowWrapper({ custom_window }: Props) {
 
   return (
     <motion.div
-      drag
+      drag={isEdditMode}
+      dragConstraints={constraintsRef}
       dragMomentum={false}
-      dragListener={isEdditMode}
       onDragEnd={(e, info) => {
-        setPosition({
-          x: position.x + info.offset.x,
-          y: position.y + info.offset.y,
-        });
+        if (!constraintsRef) return;
+        const container = constraintsRef.current;
+        console.log("constraintsRef", constraintsRef);
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        console.log("rect", rect);
+
+        const newX = Math.min(
+          Math.max(0, position.x + info.offset.x),
+          rect.width - size.width
+        );
+
+        const newY = Math.min(
+          Math.max(0, position.y + info.offset.y),
+          rect.height - size.height
+        );
+
+        setPosition({ x: newX, y: newY });
+
+        // setPosition({
+        //   x: position.x + info.offset.x,
+        //   y: position.y + info.offset.y,
+        // });
       }}
       animate={{
         x: isFullscreen ? 0 : position.x,
         y: isFullscreen ? 0 : position.y,
-        width: isFullscreen ? "100vw" : size.width,
-        height: isFullscreen ? "100vh" : size.height,
+        width: isFullscreen ? "80vw" : size.width,
+        height: isFullscreen ? "90vh" : size.height,
+      }}
+      whileDrag={{
+        scale: 1.1,
+        boxShadow: "0px 10px 20px rgba(0,0,0,0.2)",
       }}
       style={{ position: "absolute" }}
       className='bg-green-300 rounded-xl shadow-xl flex flex-col overflow-hidden'>
