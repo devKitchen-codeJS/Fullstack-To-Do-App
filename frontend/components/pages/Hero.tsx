@@ -8,9 +8,17 @@ import heroimage3 from "@/public/images/hero/hero-image-3.png";
 import bgGradient from "@/public/images/hero/gradient.png";
 import { motion, scale } from "motion/react";
 import ButtonAction from "../buttons/ButtonAction";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const Hero = () => {
   const imgArray = [heroimage, heroimage2, heroimage3];
+  const router = useRouter();
+  const isAuth = useAuth().isAuthenticated;
+  const redirectToGetStarted = () => {
+    if (isAuth) router.push("/dashboard");
+    else router.push("/signin");
+  };
   return (
     <div className='relative w-full  flex flex-col items-center overflow-hidden  bg-primary h-full'>
       <Image
@@ -51,7 +59,7 @@ const Hero = () => {
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
           className='  w-full flex flex-col items-center mt-10 mb-10 '>
-          <ButtonAction>
+          <ButtonAction onClick={() => redirectToGetStarted()}>
             <p>Get Started</p>
           </ButtonAction>
         </motion.div>

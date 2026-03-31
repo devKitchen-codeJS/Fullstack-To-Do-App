@@ -2,16 +2,25 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Home, LayoutDashboard, Settings, PanelLeft } from "lucide-react";
+import {
+  Home,
+  LayoutDashboard,
+  Settings,
+  PanelLeft,
+  SquarePen,
+} from "lucide-react";
+import { Divider } from "./Divider";
+import { useWindow } from "@/hooks/useWindow";
+import { SidebarButton } from "../buttons/SideBarButton";
 
-type Props = {
+type SideBarLinkProps = {
   href: string;
   icon: React.ReactNode;
   label: string;
   collapsed: boolean;
 };
 
-function SidebarItem({ href, icon, label, collapsed }: Props) {
+function SidebarLink({ href, icon, label, collapsed }: SideBarLinkProps) {
   return (
     <Link
       style={{ color: "#fff" }}
@@ -28,7 +37,12 @@ function SidebarItem({ href, icon, label, collapsed }: Props) {
 
 export default function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { toggleEdditMode, isEdditMode } = useWindow();
 
+  const handleClick = () => {
+    console.log("Button clicked!");
+    toggleEdditMode();
+  };
   return (
     <div
       className={`
@@ -41,7 +55,10 @@ export default function AppSidebar() {
         z-40
       `}>
       {/* Toggle button */}
-      <div className={`flex  ${collapsed? "justify-start" : "justify-end"} justify-center p-2`}>
+      <div
+        className={`flex  ${
+          collapsed ? "justify-center" : "justify-end"
+        } justify-center p-2`}>
         <button
           style={{ color: "#fff" }}
           onClick={() => setCollapsed((prev) => !prev)}
@@ -51,26 +68,40 @@ export default function AppSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className='flex flex-col gap-2 px-2 mt-2'>
-        <SidebarItem
+      <nav
+        className={`flex flex-col gap-2 px-2 mt-2  ${
+          !collapsed ? " items-start" : "items-center"
+        }`}>
+        <SidebarLink
           href='/'
           icon={<Home size={18} />}
           label='Home'
           collapsed={collapsed}
         />
 
-        <SidebarItem
+        <SidebarLink
           href='/dashboard'
           icon={<LayoutDashboard size={18} />}
           label='Dashboard'
           collapsed={collapsed}
         />
-
-        <SidebarItem
+        <Divider />
+        <SidebarLink
           href='/settings'
           icon={<Settings size={18} />}
           label='Settings'
           collapsed={collapsed}
+        />
+
+        <SidebarButton
+          icon={<SquarePen size={18} color='white' />}
+          label='Edit Dashbord'
+          collapsed={collapsed}
+          isEdditMode={isEdditMode}
+          onClick={() => {
+            handleClick();
+            toggleEdditMode();
+          }}
         />
       </nav>
     </div>

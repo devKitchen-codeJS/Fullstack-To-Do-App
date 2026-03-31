@@ -5,13 +5,15 @@ import { useRef, useState } from "react";
 import WindowHeader from "../window_components/WindowHeader";
 import { WindowState } from "@/utils/types";
 import WindowRender from "./WindowRender";
+import { useWindow } from "@/hooks/useWindow";
 
 type Props = {
-    custom_window: WindowState;
+  custom_window: WindowState;
 };
 
 export default function WindowWrapper({ custom_window }: Props) {
   const constraintsRef = useRef<HTMLDivElement>(null);
+  const { isEdditMode } = useWindow();
 
   const [position, setPosition] = useState(custom_window.position);
 
@@ -25,7 +27,7 @@ export default function WindowWrapper({ custom_window }: Props) {
     <motion.div
       drag
       dragMomentum={false}
-      dragListener={dragging}
+      dragListener={isEdditMode}
       onDragEnd={(e, info) => {
         setPosition({
           x: position.x + info.offset.x,

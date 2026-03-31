@@ -1,11 +1,11 @@
 "use client";
 
-import { useWindowContext } from "@/app/context/Window/WindowContext";
+import { useWindow } from "@/hooks/useWindow";
 import WindowWrapper from "../window_components/WindowWrapper";
 import { useEffect } from "react";
 
 export default function DragableContainer() {
-  const { windows, addWindow } = useWindowContext();
+  const { windows, addWindow } = useWindow();
   useEffect(() => {
     addWindow("calendar");
   }, []);

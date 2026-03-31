@@ -1,5 +1,6 @@
 import Header from "@/components/layout/Header";
 import React from "react";
+import { WindowProvider } from "../context/Window/WindowContext";
 
 export default function RootLayout({
   children,
@@ -9,8 +10,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <Header />
-        {children}
+        <WindowProvider>
+          <Header />
+          {children}
+        </WindowProvider>
       </body>
     </html>
   );

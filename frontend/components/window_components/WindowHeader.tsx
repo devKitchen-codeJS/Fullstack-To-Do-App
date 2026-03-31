@@ -1,3 +1,4 @@
+import { useWindow } from "@/hooks/useWindow";
 import React from "react";
 interface WindowHeaderProps {
   title: string;
@@ -7,7 +8,9 @@ interface WindowHeaderProps {
   isFullscreen: boolean;
 }
 const WindowHeader = (props: WindowHeaderProps) => {
-  const { title, setDragging, setIsFullscreen, isFullscreen, dragging } = props;
+  const { title, setIsFullscreen, isFullscreen } = props;
+  const { isEdditMode } = useWindow();
+
   return (
     <div>
       {/* Header */}
@@ -19,11 +22,6 @@ const WindowHeader = (props: WindowHeaderProps) => {
         <span className='font-medium'>{title}</span>
 
         <div className='flex gap-2'>
-          <button
-            onClick={() => setDragging(!dragging)}
-            className='px-2 py-1 text-xs rounded bg-green-500 text-white '>
-            Allow to Drag
-          </button>
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             className='px-2 py-1 text-xs bg-blue-500 text-white rounded'>

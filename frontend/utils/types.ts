@@ -20,6 +20,7 @@ export type WindowState = {
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
+  isEdditMode: boolean;
   isMinimized: boolean;
   isMaximized: boolean;
   isClosed: boolean;

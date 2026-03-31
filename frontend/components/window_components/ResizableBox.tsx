@@ -1,5 +1,5 @@
-'use client';
-import { useWindowContext } from "@/app/context/Window/WindowContext";
+"use client";
+import { useWindow } from "@/hooks/useWindow";
 import React, { useRef, useState } from "react";
 
 export default function ResizableBox({
@@ -7,12 +7,11 @@ export default function ResizableBox({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-type Position = {
+  type Position = {
     x: number;
     y: number;
   };
-  
+
   type Size = {
     width: number;
     height: number;
@@ -22,7 +21,7 @@ type Position = {
   const [position, setPosition] = useState<Position>({ x: 100, y: 100 });
   const [size, setSize] = useState<Size>({ width: 400, height: 300 });
 
-  const {updateWindow} = useWindowContext();
+  const { updateWindow } = useWindow();
 
   return (
     <div
