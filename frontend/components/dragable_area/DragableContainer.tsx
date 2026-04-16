@@ -3,13 +3,14 @@
 import { useWindow } from "@/hooks/useWindow";
 import WindowWrapper from "../window_components/WindowWrapper";
 import { useEffect, useRef } from "react";
+import { WindowType } from "@/utils/types";
 
 export default function DragableContainer() {
   const { windows, addWindow } = useWindow();
   const constraintsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    addWindow("calendar");
+    addWindow(WindowType.Calendar);
   }, []);
   return (
     <div

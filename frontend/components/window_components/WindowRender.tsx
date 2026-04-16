@@ -1,12 +1,11 @@
 import { TaskCalendar } from "@/components/calendar/TaskCalendar";
-import { WindowState } from "../../utils/types";
-
+import { WindowState, WindowType } from "../../utils/types";
 function WindowRender({ window }: { window: WindowState }) {
   switch (window.type) {
-    case "calendar":
+    case WindowType.Calendar :
       return <TaskCalendar />;
 
-    case "chat":
+    case WindowType.Chart:
       return <TaskCalendar />;
 
     // case "chart":

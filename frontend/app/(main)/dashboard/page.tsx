@@ -8,11 +8,11 @@ import AppSidebar from "@/components/layout/SIdebar";
 
 const Dashboard = () => {
   return (
-    <Container className=' relative bg-secondary h-[calc(100vh-76px)] w-full'>
+    <div className=' relative bg-secondary h-[calc(100vh-76px)] pl-16 w-full'>
       <EditSidebarMenu />
       <AppSidebar />
       <DragableContainer />
-    </Container>
+    </div>
   );
 };
 

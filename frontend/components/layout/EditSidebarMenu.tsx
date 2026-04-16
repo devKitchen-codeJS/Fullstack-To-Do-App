@@ -1,6 +1,7 @@
 "use client";
 
 import { useWindow } from "@/hooks/useWindow";
+import { WindowType } from "@/utils/types";
 
 export default function EditSidebarMenu() {
   const { addWindow, isEdditMode } = useWindow();
@@ -19,7 +20,7 @@ export default function EditSidebarMenu() {
 
           <button
             className='w-full bg-muted hover:bg-muted/70 rounded p-2 text-left'
-            onClick={() => addWindow("calendar")}>
+            onClick={() => addWindow(WindowType.Calendar)}>
             Add Calendar
           </button>
 

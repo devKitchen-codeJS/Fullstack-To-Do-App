@@ -35,7 +35,7 @@ const Header = () => {
   //               }}
   //               className=' right-4 bg-secondary text-white px-3 py-2 rounded-md shadow'>
   //               Eddit Dashbord
-  //             </button>
+   //             </button>
 
   if (loading) return null;
 

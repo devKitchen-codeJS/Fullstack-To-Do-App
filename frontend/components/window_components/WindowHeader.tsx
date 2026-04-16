@@ -2,7 +2,7 @@ import { useWindow } from "@/hooks/useWindow";
 import React from "react";
 interface WindowHeaderProps {
   title: string;
-  setDragging: React.Dispatch<React.SetStateAction<boolean>>;
+  // setDragging: React.Dispatch<React.SetStateAction<boolean>>;
   setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
   dragging: boolean;
   isFullscreen: boolean;
@@ -15,11 +15,11 @@ const WindowHeader = (props: WindowHeaderProps) => {
     <div>
       {/* Header */}
       <div
-        className='bg-gray-300 px-4 py-2 flex justify-between items-center cursor-grab active:cursor-grabbing select-none'
+        className='bg-primary px-4 py-2 flex justify-between items-center cursor-grab active:cursor-grabbing select-none'
         onPointerDown={(e) => {
           e.stopPropagation();
         }}>
-        <span className='font-medium'>{title}</span>
+        <span className='font-medium text-white'>{title}</span>
 
         <div className='flex gap-2'>
           <button

@@ -16,7 +16,7 @@ export interface AuthContextType {
 
 export type WindowState = {
   id: string;
-  type: "calendar" | "chat" | "chart" | "todo";
+  type: WindowType;
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
@@ -25,3 +25,10 @@ export type WindowState = {
   isMaximized: boolean;
   isClosed: boolean;
 };
+
+export enum WindowType {
+  Calendar = "Calendar",
+  Chat = "Chat",
+  Chart = "Chart",
+  Todo = "Todo",
+}

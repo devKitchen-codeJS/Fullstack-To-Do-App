@@ -63,18 +63,18 @@ export function TaskCalendar() {
     return <CalendarTaskModal />;
   };
   const handledoubleClick = () => {
-    console.log("Open task modal for date:");
+    // console.log("Open task modal for date:");
   };
 
   const onMouseDownHandle = (date: Date) => {
-    console.log("Mouse down", date);
+    // console.log("Mouse down", date);
     setIsSelecting(true);
     setStartDate(date);
     setEndDate(date);
   };
 
   const onMouseEnterHanle = (date: Date) => {
-    console.log("Mouse enter", date);
+    // console.log("Mouse enter", date);
 
     if (!isSelecting || !startDate) return;
     setEndDate(date);
@@ -83,7 +83,7 @@ export function TaskCalendar() {
   useEffect(() => {
     const handleMouseUp = () => {
       setIsSelecting(false);
-      console.log("Mouse up");
+      // console.log("Mouse up");
     };
 
     window.addEventListener("mouseup", handleMouseUp);
@@ -94,7 +94,7 @@ export function TaskCalendar() {
   }, []);
 
   useEffect(() => {
-    console.log(isSelecting, startDate, endDate);
+    // console.log(isSelecting, startDate, endDate);
   }, [isSelecting]);
 
   const isInRange = (date: Date) => {

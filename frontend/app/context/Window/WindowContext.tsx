@@ -7,10 +7,12 @@ type WindowContextType = {
   // allowToDrag: boolean;
   isEdditMode: boolean;
   windows: WindowState[];
+  zIndex: number;
   toggleEdditMode: () => void;
   addWindow: (window: WindowState["type"]) => void;
   updateWindow: (id: string, updatedWindow: Partial<WindowState>) => void;
   removeWindow: (id: string) => void;
+  bringToFront: (id: string) => void;
 };
 
 export const WindowContext = createContext<WindowContextType | undefined>(
@@ -22,11 +24,9 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [isEdditMode, setIsEdditMode] = useState(false);
-  // const [isEdditOpen, setIsEdditMode] = useState(false);
-
+  const [zIndex, setZIndex] = useState(1);
   const toggleEdditMode = () => {
     setIsEdditMode(!isEdditMode);
-    // console.log("toggleEdditMode", isEdditMode);
   };
 
   const addWindow = (type: WindowState["type"]) => {
@@ -67,15 +67,30 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({
     setWindows((prev) => prev.filter((window) => window.id !== id));
   };
 
+  const bringToFront = (id: string) => {
+    console.log("bringToFront", id);
+    setZIndex((prev) => {
+      const next = prev + 1;
+
+      setWindows((windows) =>
+        windows.map((w) => (w.id === id ? { ...w, zIndex: next } : w))
+      );
+
+      return next;
+    });
+  };
+
   return (
     <WindowContext.Provider
       value={{
         windows,
         isEdditMode,
+        zIndex,
         toggleEdditMode,
         addWindow,
         updateWindow,
         removeWindow,
+        bringToFront,
       }}>
       {children}
     </WindowContext.Provider>
