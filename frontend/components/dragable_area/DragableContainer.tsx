@@ -2,16 +2,27 @@
 
 import { useWindow } from "@/hooks/useWindow";
 import WindowWrapper from "../window_components/WindowWrapper";
-import { useEffect, useRef } from "react";
-import { WindowType } from "@/utils/types";
+import { useEffect, useRef, useState } from "react";
+import { Size, WindowType } from "@/utils/types";
 
 export default function DragableContainer() {
-  const { windows, addWindow } = useWindow();
+  const { windows, addWindow, setDeskSize } = useWindow();
   const constraintsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = constraintsRef.current;
+
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setDeskSize({ w: Math.round(width), h: Math.round(height) });
+    });
     addWindow(WindowType.Calendar);
+
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
+
   return (
     <div
       ref={constraintsRef}

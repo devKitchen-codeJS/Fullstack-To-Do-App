@@ -17,14 +17,24 @@ export interface AuthContextType {
 export type WindowState = {
   id: string;
   type: WindowType;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
+  position: Vector;
+  size: Size;
   zIndex: number;
   isEdditMode: boolean;
   isMinimized: boolean;
   isMaximized: boolean;
   isClosed: boolean;
 };
+
+export interface Vector {
+  x: number;
+  y: number;
+}
+
+export interface Size {
+  w: number;
+  h: number;
+}
 
 export enum WindowType {
   Calendar = "Calendar",

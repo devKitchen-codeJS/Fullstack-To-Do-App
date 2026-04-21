@@ -1,59 +1,54 @@
 import { useCallback } from "react";
-
-type Size = {
-  width: number;
-  height: number;
-};
+import { useWindow } from "./useWindow";
+import { Size, Vector } from "@/utils/types";
 
 export const useSnap = () => {
   const EDGE_SNAP = 20;
   const CENTER_SNAP = 12;
-  //SNAP FUNCTION
-  const getSnap = useCallback(
-    (x: number, y: number, rect: DOMRect, size: Size) => {
-      let snappedX = x;
-      let snappedY = y;
 
+  const { setSnapGuides, clearSnapGuides } = useWindow();
+  //SNAP FUNCTION
+
+  const snap = useCallback(
+    (
+      pos: Vector,
+      size: Size,
+      deskSize: Size
+    ): { pos: Vector; guideX: number | null; guideY: number | null } => {
+      let { x, y } = pos;
+      const { w, h } = size;
+      const { w: DW, h: DH } = deskSize;
       let guideX: number | null = null;
       let guideY: number | null = null;
 
-      const W = size.width;
-      const H = size.height;
-      const CW = rect.width;
-      const CH = rect.height;
-
       // X axis
       if (x < EDGE_SNAP) {
-        snappedX = 0;
+        x = 0;
         guideX = 0;
-      } else if (Math.abs(x + W / 2 - CW / 2) < CENTER_SNAP) {
-        snappedX = CW / 2 - W / 2;
-        guideX = CW / 2;
-      } else if (Math.abs(x + W - CW) < EDGE_SNAP) {
-        snappedX = CW - W;
-        guideX = CW;
+      } else if (Math.abs(x + w / 2 - DW / 2) < CENTER_SNAP) {
+        x = DW / 2 - w / 2;
+        guideX = DW / 2;
+      } else if (Math.abs(x + w - DW) < EDGE_SNAP) {
+        x = DW - w;
+        guideX = DW;
       }
 
       // Y axis
       if (y < EDGE_SNAP) {
-        snappedY = 0;
+        y = 0;
         guideY = 0;
-      } else if (Math.abs(y + H / 2 - CH / 2) < CENTER_SNAP) {
-        snappedY = CH / 2 - H / 2;
-        guideY = CH / 2;
-      } else if (Math.abs(y + H - CH) < EDGE_SNAP) {
-        snappedY = CH - H;
-        guideY = CH;
+      } else if (Math.abs(y + h / 2 - DH / 2) < CENTER_SNAP) {
+        y = DH / 2 - h / 2;
+        guideY = DH / 2;
+      } else if (Math.abs(y + h - DH) < EDGE_SNAP) {
+        y = DH - h;
+        guideY = DH;
       }
 
-      return {
-        pos: { x: snappedX, y: snappedY },
-        guideX,
-        guideY,
-      };
+      return { pos: { x, y }, guideX, guideY };
     },
     []
   );
 
-  return { getSnap };
+  return { snap, setSnapGuides, clearSnapGuides };
 };

@@ -6,10 +6,16 @@
   --secondary: #304040;
   --accent: #5b7065;
   --muted: #c9d1c8;
+  --surface: #1C1B1A;
 
   --container-padding: 11.25rem;
   --container-padding-mobile: 2rem;
   --header-height: 76px;
+
+  /* Borders */
+  --subtle: rgba(0, 0, 0, 0.08);
+  --base: rgba(0, 0, 0, 0.15);
+  --strong: rgba(0, 0, 0, 0.25);
 }
 
 @theme inline {
@@ -18,11 +24,16 @@
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
+  --color-surface: var(--surface);
 
   --font-inter: var(--font-inter);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --spacing-header: var(--header-height);
+
+  --subtle: var(--subtle);
+  --base: var(--base);
+  --strong: var(--strong);
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -43,4 +54,19 @@
   .submit-button {
     @apply bg-accent text-white font-medium rounded-md px-4 py-2 hover:bg-blue-700;
   }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-base);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
 }

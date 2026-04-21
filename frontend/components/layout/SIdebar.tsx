@@ -36,7 +36,7 @@ function SidebarLink({ href, icon, label, collapsed }: SideBarLinkProps) {
 }
 
 export default function AppSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const { toggleEdditMode, isEdditMode } = useWindow();
 
   const handleClick = () => {
