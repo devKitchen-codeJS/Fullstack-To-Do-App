@@ -6,7 +6,7 @@ import WindowRender from "./WindowRender";
 import { useWindow } from "@/hooks/useWindow";
 import { useSnap } from "@/hooks/useSnap";
 import clsx from "clsx";
-import { WindowState } from "@/utils/types";
+import { Vector, WindowState } from "@/utils/types";
 import WindowHeader from "./WindowHeader";
 
 type Props = {
@@ -15,11 +15,11 @@ type Props = {
 };
 
 const WIDGET_TITLES: Record<string, string> = {
-  todo: "Задачи",
-  calendar: "Календарь",
-  notes: "Заметки",
-  pomodoro: "Помодоро",
-  habits: "Привычки",
+  todo: "Tasks",
+  calendar: "Calendar",
+  notes: "Notes",
+  pomodoro: "Pomodoro",
+  habits: "Habbits",
 };
 
 const SPRING = {
@@ -43,62 +43,44 @@ export default function WindowWrapper({ custom_window }: Props) {
 
   const { snap } = useSnap();
 
-  // const [isFullscreen, setIsFullscreen] = useState(false);
-
   const dragStart = useRef<{ x: number; y: number } | null>(null);
 
-  const handleMove = useCallback(
-    (e: PointerEvent) => {
-      if (!dragStart.current) return;
+  const onTitlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if ((e.target as HTMLElement).closest("[data-nodrag]")) return;
+      e.preventDefault();
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      dragStart.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+      focusWindow(id);
+    },
+    [pos, id, focusWindow]
+  );
 
-      const clamped = {
+  const onTitlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!dragStart.current) return;
+      const clamped: Vector = {
         x: Math.max(
           0,
           Math.min(e.clientX - dragStart.current.x, deskSize.w - size.w)
         ),
         y: Math.max(
           0,
-          Math.min(e.clientY - dragStart.current.y, deskSize.h - size.h)
+          Math.min(e.clientY - dragStart.current.y, deskSize.h - 40)
         ),
       };
-
       const { pos: snapped, guideX, guideY } = snap(clamped, size, deskSize);
-
-      setSnapGuides({ x: guideX, y: guideY });
+      const guides = { guideX, guideY };
+      setSnapGuides(guides);
       moveWindow(id, snapped);
     },
-    [deskSize, size, snap, setSnapGuides, moveWindow, id]
+    [id, size, deskSize, snap, setSnapGuides, moveWindow]
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleUp = () => {
+  const onTitlePointerUp = useCallback(() => {
     dragStart.current = null;
     clearSnapGuides();
-
-    window.removeEventListener("pointermove", handleMove);
-    window.removeEventListener("pointerup", handleUp);
-  };
-
-  // 👉 DOWN (ТОЛЬКО НА HEADER)
-  const onTitlePointerDown = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if ((e.target as HTMLElement).closest("[data-nodrag]")) return;
-
-      e.preventDefault();
-
-      dragStart.current = {
-        x: e.clientX - pos.x,
-        y: e.clientY - pos.y,
-      };
-
-      focusWindow(id);
-
-      // 🔥 ВАЖНО — вешаем на window
-      window.addEventListener("pointermove", handleMove);
-      window.addEventListener("pointerup", handleUp);
-    },
-    [pos, id, focusWindow, handleMove, handleUp]
-  );
+  }, [clearSnapGuides]);
 
   return (
     <motion.div
@@ -124,7 +106,10 @@ export default function WindowWrapper({ custom_window }: Props) {
 
       <div
         className='h-9 shrink-0 flex items-center gap-2 px-3 cursor-grab active:cursor-grabbing bg-surface border-b border-border-subtle'
-        onPointerDown={onTitlePointerDown}>
+        onPointerDown={onTitlePointerDown}
+        onPointerMove={onTitlePointerMove}
+        onPointerUp={onTitlePointerUp}
+        onPointerLeave={onTitlePointerUp}>
         <div className='flex gap-[5px] shrink-0' data-nodrag='true'>
           <TrafficDot color='#FF5F57' onClick={() => {}} />
           <TrafficDot color='#FEBC2E' onClick={() => {}} />
@@ -158,63 +143,3 @@ function TrafficDot({
     />
   );
 }
-
-{
-  /* {!isFullscreen && (
-          <div
-            onMouseDown={(e) => {
-              e.preventDefault();
-
-              const startX = e.clientX;
-              const startY = e.clientY;
-
-              const startWidth = size.w;
-              const startHeight = size.h;
-
-              const handleMouseMove = (moveEvent: MouseEvent) => {
-                setSize({
-                  w: Math.max(250, startWidth + (moveEvent.clientX - startX)),
-                  h: Math.max(200, startHeight + (moveEvent.clientY - startY)),
-                });
-              };
-
-              const handleMouseUp = () => {
-                window.removeEventListener("mousemove", handleMouseMove);
-                window.removeEventListener("mouseup", handleMouseUp);
-              };
-
-              window.addEventListener("mousemove", handleMouseMove);
-              window.addEventListener("mouseup", handleMouseUp);
-            }}
-            className='w-4 h-4 bg-gray-300 absolute bottom-0 right-0 cursor-se-resize'
-          />
-        )} */
-}
-
-/* 🔵 SNAP PREVIEW
-      {preview && (
-        <div
-          className='absolute border-2 border-blue-500 bg-blue-200/20 rounded-xl pointer-events-none'
-          style={{
-            left: preview.x,
-            top: preview.y,
-            width: size.w,
-            height: size.h,
-          }}
-        />
-      )}
-
-      {/* 📏 SNAP GUIDES */
-
-// {guides.x !== null && (
-//   <div
-//     className='absolute top-0 bottom-0 w-[1px] bg-blue-400 pointer-events-none z-[999]'
-//     style={{ left: guides.x }}
-//   />
-// )}
-// {guides.y !== null && (
-//   <div
-//     className='absolute left-0 right-0 h-[1px] bg-blue-400 pointer-events-none z-[999]'
-//     style={{ top: guides.y }}
-//   />
-// )} */}
