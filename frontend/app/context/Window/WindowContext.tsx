@@ -10,9 +10,12 @@ type WindowContextType = {
   zIndex: number;
   acctiveWindowId: string | null;
   deskSize: Size;
-  snapGuides: { x: number | null; y: number | null };
+  snapGuides: { guideX: number | null; guideY: number | null };
   clearSnapGuides: () => void;
-  setSnapGuides: (guides: { x: number | null; y: number | null }) => void;
+  setSnapGuides: (guides: {
+    guideX: number | null;
+    guideY: number | null;
+  }) => void;
   setDeskSize: (size: Size) => void;
   focusWindow: (id: string) => void;
   toggleEdditMode: () => void;
@@ -35,12 +38,12 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({
   const [zIndex, setZIndex] = useState(1);
   const [acctiveWindowId, setActiveWindowId] = useState<string | null>(null);
   const [deskSize, setDeskSize] = useState<Size>({ w: 1200, h: 700 });
-  const [snapGuides, setSnapGuides] = useState<{
-    x: number | null;
-    y: number | null;
+  const [snapGuides, setGuides] = useState<{
+    guideX: number | null;
+    guideY: number | null;
   }>({
-    x: null,
-    y: null,
+    guideX: null,
+    guideY: null,
   });
   const toggleEdditMode = () => {
     setIsEdditMode(!isEdditMode);
@@ -108,8 +111,15 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  const setSnapGuides = (guides: {
+    guideX: number | null;
+    guideY: number | null;
+  }) => {
+    setGuides(guides);
+  };
+
   const clearSnapGuides = () => {
-    setSnapGuides({ x: null, y: null });
+    setSnapGuides({ guideX: null, guideY: null });
   };
 
   return (
